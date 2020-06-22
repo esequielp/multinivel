@@ -1,0 +1,49 @@
+/*
+ _____                                    __  __                                               
+/\___ \                                  /\ \/\ \                                              
+\/__/\ \     __    ____  __  __  __  _   \ \ \_\ \     __   _ __   _ __    __   _ __    __     
+   _\ \ \  /'__`\ /',__\/\ \/\ \/\ \/'\   \ \  _  \  /'__`\/\`'__\/\`'__\/'__`\/\`'__\/'__`\   
+  /\ \_\ \/\  __//\__, `\ \ \_\ \/>  </    \ \ \ \ \/\  __/\ \ \/ \ \ \//\  __/\ \ \//\ \L\.\_ 
+  \ \____/\ \____\/\____/\ \____//\_/\_\    \ \_\ \_\ \____\\ \_\  \ \_\\ \____\\ \_\\ \__/.\_\
+   \/___/  \/____/\/___/  \/___/ \//\/_/     \/_/\/_/\/____/ \/_/   \/_/ \/____/ \/_/ \/__/\/_/
+
+Template:
+Mi Pagina: http://www.vivegroup.org/
+Twitter: https://twitter.com/katzhate
+Facebook: https://www.facebook.com/katzhate/
+Email: katzhate@vivegroup.org
+*/
+
+@import url('css/font-awesome.min.css');
+@import url('css/bootstrap.min.css');
+@import url('css/animate.css');
+
+body{
+	 text-align: center;
+}
+
+a{
+    width: 60px;
+    height: 60px;
+    background: #139cbb;
+    display: inline-block;
+    border-radius: 50%;
+    line-height: 58px;
+    color: #FFF;
+}
+
+a:hover{
+	background: #63bb13;
+	text-decoration: none;
+	color: #FFF;
+}
+
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 0px solid #ddd;
+}
+
+
