@@ -4,13 +4,13 @@
    // Asignar variable a la clase
    $arbol = new Arbol();
 
-if ( isset($_GET['padre']) ) {
+if ( isset($_GET['posicion']) ) {
 
-  $padre=$_GET['padre'];
+  $posicion=$_GET['posicion'];
 
 }else{
 
-  $padre=1;
+  $posicion=1;
 }
 
 ?>
@@ -39,7 +39,8 @@ if ( isset($_GET['padre']) ) {
     <div class="container" style="margin-top: 50px;">
       <?php
           
-            $arbol->createDesktop($padre);
+            //$arbol->createDesktop($posicion);
+            $arbol->createMatrix(1);
 
       ?>
     </div>

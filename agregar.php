@@ -15,11 +15,12 @@ if (isset($_POST['nickname'])){
    $sentence -> execute();
    $lastiduser = $conexion -> lastInsertId();
 
-   $SQLT = 'INSERT INTO arbol(lugar,lado,iduser) VALUES (:lugar,:lado,:iduser)';
+   $SQLT = 'INSERT INTO arbol(lugar,lado,iduser,idpadre) VALUES (:lugar,:lado,:iduser,:idpadre)';
    $stn = $conexion -> prepare($SQLT);
    $stn -> bindParam(':lugar',$_POST['lugar'],PDO::PARAM_INT);
    $stn -> bindParam(':lado',$_POST['lado'],PDO::PARAM_INT);
    $stn -> bindParam(':iduser',$lastiduser,PDO::PARAM_INT);
+   $stn -> bindParam(':idpadre',$lastiduser,PDO::PARAM_INT);
    $stn -> execute();
 
    header('Location: index.php');
@@ -65,6 +66,8 @@ if (isset($_POST['nickname'])){
                <input type="text" name="contrasena" class="form-control">
                <input type="hidden" name="lugar" value="<?php echo $_GET['p']; ?>">
                <input type="hidden" name="lado" value="<?php echo $_GET['lado']; ?>">
+               <input type="hidden" name="padre" value="<?php echo $_GET['padre']; ?>">
+
                <p></p>
                <button class="btn btn-success btn-lg">Agregar</button>
 

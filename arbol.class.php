@@ -1,5 +1,7 @@
 <?php
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once 'config.class.php';
 
 Class Arbol
@@ -53,8 +55,8 @@ Class Arbol
             <div id="secondblock" class="col-md-12">
               <table class="table">
                  <tr>
-                   <td>'.$this->checkPosition($first).'<p></p> izquierdo</td>
-                   <td>'.$this->checkPosition($second).'<p></p> derecho</td>
+                   <td>'.$this->checkPosition($first).'<p></p>'. $first .' izquierdo</td>
+                   <td>'.$this->checkPosition($second).'<p></p>'. $second .' derecho</td>
                  </tr>
               </table>
             </div>
@@ -71,10 +73,10 @@ Class Arbol
             <div id="thirdblock" class="col-md-12">
               <table class="table">
                  <tr>
-                   <td>'.$this->checkPosition($ffirst).'<p></p> izquierdo</td>
-                   <td>'.$this->checkPosition($ssecond).'<p></p> derecho</td>
-                   <td>'.$this->checkPosition($tthird).'<p></p> izquierdo</td>
-                   <td>'.$this->checkPosition($ffourth).'<p></p> derecho</td>
+                   <td>'.$this->checkPosition($ffirst).'<p></p> '. $ffirst .' izquierdo</td>
+                   <td>'.$this->checkPosition($ssecond).'<p></p> '. $ssecond .' derecho</td>
+                   <td>'.$this->checkPosition($tthird).'<p></p> '. $tthird .' izquierdo</td>
+                   <td>'.$this->checkPosition($ffourth).'<p></p> '. $ffourth .' derecho</td>
                  </tr>
               </table>
             </div>
@@ -96,14 +98,14 @@ Class Arbol
 
               <table class="table">
                  <tr>
-                   <td>'.$this->checkPosition($fffirst).'<p></p> izquierdo</td>
-                   <td>'.$this->checkPosition($sssecond).'<p></p> derecho</td>
-                   <td>'.$this->checkPosition($ttthird).'<p></p> izquierdo</td>
-                   <td>'.$this->checkPosition($fffourth).'<p></p> derecho</td>
-                   <td>'.$this->checkPosition($fifth).'<p></p> izquierdo</td>
-                   <td>'.$this->checkPosition($sixth).'<p></p> derecho</td>
-                   <td>'.$this->checkPosition($seventh).'<p></p> izquierdo</td>
-                   <td>'.$this->checkPosition($eighth).'<p></p> derecho</td>
+                   <td>'.$this->checkPosition($fffirst).'<p></p>'. $fffirst .' izquierdo</td>
+                   <td>'.$this->checkPosition($sssecond).'<p></p>'. $sssecond .'  derecho</td>
+                   <td>'.$this->checkPosition($ttthird).'<p></p>'. $ttthird .'  izquierdo</td>
+                   <td>'.$this->checkPosition($fffourth).'<p></p>'. $fffourth .'  derecho</td>
+                   <td>'.$this->checkPosition($fifth).'<p></p> '. $fifth .' izquierdo</td>
+                   <td>'.$this->checkPosition($sixth).'<p></p>'. $sixth .'  derecho</td>
+                   <td>'.$this->checkPosition($seventh).'<p></p>'. $seventh .'  izquierdo</td>
+                   <td>'.$this->checkPosition($eighth).'<p></p> '. $eighth .' derecho</td>
                  </tr>
               </table>
 
@@ -119,7 +121,125 @@ Class Arbol
 
     }
 
+
+    public function createMatrix($idpadre){
+         // conexion de base de datos
+         $conexion = Conexion::singleton_conexion();
+
+         $izquierdo = 1;
+         $derecho = 2;
+
+         //********* PRIMER BLOQUE *********//
+         $idpadre =1;
+         $nivel=1;
+         $start_position="";
+         $stop_position="";
+         echo $this->createBlock($idpadre,$nivel,$start_position,$stop_position);
+
+        //********* SEGUNDO BLOQUE *********//
+         $idpadre =1;
+         $nivel=2;
+         $start_position=1;
+         $stop_position=2;
+         echo $this->createBlock($idpadre,$nivel,$start_position,$stop_position);
+
+        //********* TERCER BLOQUE *********//
+         $idpadre =1;
+         $nivel=3;
+         $start_position=3;
+         $stop_position=6;
+         echo $this->createBlock($idpadre,$nivel,$start_position,$stop_position);
+
+        //********* CUARTO BLOQUE *********//
+         $idpadre =1;
+         $nivel=4;
+         $start_position=7;
+         $stop_position=14;
+         echo $this->createBlock($idpadre,$nivel,$start_position,$stop_position);
+
+    }
+
+    public function createBlock($idpadre,$nivel,$start_position,$stop_position){
+    
+    $conexion = Conexion::singleton_conexion();
+     //////*********  Primer Bloque    ***************** ////////////// 
+        $block ="";
+        $body_block ="";
+
+        $SQL = "SELECT usuarios.id,usuarios.username, arbol.position, arbol.iduser FROM arbol 
+                INNER JOIN usuarios ON arbol.iduser = usuarios.id 
+                WHERE arbol.idpadre = ? AND arbol.position BETWEEN ? AND ? 
+                ORDER BY POSITION ";  
+        $block_container="firstblock";
+        if($nivel ==1){
+        $SQL = "SELECT usuarios.id,usuarios.username, arbol.position, arbol.iduser FROM arbol 
+                INNER JOIN usuarios ON arbol.iduser = usuarios.id 
+                WHERE usuarios.id = ? 
+                ORDER BY POSITION ";
+        }elseif($nivel ==2){
+          $block_container="secondblock";
+        }elseif($nivel ==3){
+          $block_container="thirdblock";
+        }elseif($nivel ==4){
+          $block_container="fourthblock";
+        }
+        
+       
+        $sentence = $conexion -> prepare($SQL);
+        
+        //$sentence -> bindParam(':idpadre',$idpadre);
+
+        $sentence->bindParam(1, $idpadre);
+
+        if($nivel !=1){
+            $sentence->bindParam(2, $start_position);
+            $sentence->bindParam(3, $stop_position);
+        }
+
+        $sentence -> execute();
+        
+
+        $results = $sentence -> fetchAll();
+        //
+       // echo "<pre>";
+      // print_r($results);
+       //exit;
+
+        if (empty($results)){
+               echo "Lugar Vacio";
+               //return '<a href="agregar.php?p='.$position.'&side=">Agregar</a>';
+        }else{
+          
+         $block = '
+         <div id="'.$block_container.'" class="col-md-12">
+         <table class="table">
+         <tr>
+         ';
+
+          foreach ($results as $key){
+                 
+            if ($key['iduser']==99999999) {
+              $body_block .= '<td><a href="agregar.php?p='.$position.'&side=">Agregar</a></td>'; 
+            } else {
+               $body_block .= '<td><a href="index.php?posicion='.$key['position'].'" style="color: #FFF;background: #63bb13;">'.$key['username'].'</a></td>'; 
+            }
+        
+         }
+              $block .= $body_block . ' </tr>
+              </table>
+            </div>
+         ';
+
+        }
+
+        return $block;
+
+    }
+
+    
     public function checkPosition($position){
+
+
 
     	// conexion de base de datos
     	$conexion = Conexion::singleton_conexion();
@@ -133,7 +253,7 @@ Class Arbol
         	     return '<a href="agregar.php?p='.$position.'&side=">Agregar</a>';
         }else{
         	foreach ($results as $key){
-        		  return '<a href="index.php?padre='.$position.'" style="color: #FFF;background: #63bb13;">'.$key['username'].'</a>';
+        		  return '<a href="index.php?posicion='.$position.'" style="color: #FFF;background: #63bb13;">'.$key['username'].'</a>';
         	}
         }
 

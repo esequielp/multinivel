@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="utf8" collation="utf8_bin">multinivel2</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="arbol" view="colnames">
+<left>670</left>
+<top>3</top>
+<width>135</width>
+<height>222</height>
+<sql_create_table>CREATE TABLE `arbol` (
+  `idarbol` bigint(20) NOT NULL AUTO_INCREMENT,
+  `lugar` bigint(20) NOT NULL,
+  `lado` int(11) NOT NULL,
+  `posicion` int(11) DEFAULT NULL,
+  `idusuario` bigint(20) NOT NULL,
+  `idpadre` bigint(20) NOT NULL,
+  `idmatriz` bigint(20) NOT NULL,
+  `reservado` int(1) DEFAULT '0',
+  `fecha_reserva` datetime DEFAULT NULL,
+  PRIMARY KEY (`idarbol`),
+  KEY `idusuario` (`idusuario`),
+  KEY `idmatriz` (`idmatriz`),
+  CONSTRAINT `arbol_ibfk_1` FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
+  CONSTRAINT `arbol_ibfk_2` FOREIGN KEY (`idmatriz`) REFERENCES `matriz` (`idmatriz`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin</sql_create_table>
+</table>
+<table name="calificaciones" view="colnames">
+<left>17</left>
+<top>118</top>
+<width>133</width>
+<height>180</height>
+<sql_create_table>CREATE TABLE `calificaciones` (
+  `idcalificacion` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idusuario` bigint(20) DEFAULT NULL,
+  `positivas` int(11) DEFAULT NULL,
+  `negativas` int(11) DEFAULT NULL,
+  `fecha_positiva` datetime DEFAULT NULL,
+  `fecha_negativa` datetime DEFAULT NULL,
+  PRIMARY KEY (`idcalificacion`),
+  KEY `idusuario` (`idusuario`),
+  CONSTRAINT `calificaciones_ibfk_1` FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin</sql_create_table>
+</table>
+<table name="matriz" view="colnames">
+<left>503</left>
+<top>126</top>
+<width>113</width>
+<height>197</height>
+<sql_create_table>CREATE TABLE `matriz` (
+  `idmatriz` bigint(20) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `monto` int(11) DEFAULT NULL,
+  `fecha_inicio` datetime DEFAULT NULL,
+  `fecha_fin` datetime DEFAULT NULL,
+  `idusuario` bigint(20) NOT NULL,
+  `idpago` int(11) NOT NULL,
+  PRIMARY KEY (`idmatriz`),
+  KEY `idusuario` (`idusuario`),
+  KEY `idpago` (`idpago`),
+  CONSTRAINT `matriz_ibfk_1` FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
+  CONSTRAINT `matriz_ibfk_2` FOREIGN KEY (`idpago`) REFERENCES `pago` (`idpago`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin</sql_create_table>
+</table>
+<table name="pago" view="colnames">
+<left>233</left>
+<top>304</top>
+<width>112</width>
+<height>180</height>
+<sql_create_table>CREATE TABLE `pago` (
+  `idpago` int(11) NOT NULL AUTO_INCREMENT,
+  `idusuario` bigint(20) NOT NULL,
+  `idtipopago` int(11) NOT NULL,
+  `idplan` int(11) DEFAULT NULL,
+  `fecha_pago` datetime DEFAULT NULL,
+  `status` int(1) NOT NULL,
+  `monto` decimal(16,2) DEFAULT NULL,
+  PRIMARY KEY (`idpago`),
+  KEY `idtipopago` (`idtipopago`),
+  KEY `idplan` (`idplan`),
+  CONSTRAINT `pago_ibfk_1` FOREIGN KEY (`idtipopago`) REFERENCES `pago_tipo` (`idtipopago`),
+  CONSTRAINT `pago_ibfk_2` FOREIGN KEY (`idplan`) REFERENCES `plan` (`idplan`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin</sql_create_table>
+</table>
+<table name="pago_arbol" view="colnames">
+<left>887</left>
+<top>212</top>
+<width>113</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `pago_arbol` (
+  `idpagoarbol` int(11) NOT NULL AUTO_INCREMENT,
+  `idarbol` bigint(20) NOT NULL,
+  `idtipopago` int(11) NOT NULL,
+  `fecha_pago` datetime NOT NULL,
+  `status` int(1) NOT NULL,
+  PRIMARY KEY (`idpagoarbol`),
+  KEY `idarbol` (`idarbol`),
+  KEY `idtipopago` (`idtipopago`),
+  CONSTRAINT `pago_arbol_ibfk_1` FOREIGN KEY (`idarbol`) REFERENCES `arbol` (`idarbol`),
+  CONSTRAINT `pago_arbol_ibfk_2` FOREIGN KEY (`idtipopago`) REFERENCES `pago_tipo` (`idtipopago`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin</sql_create_table>
+</table>
+<table name="pago_tipo" view="colnames">
+<left>496</left>
+<top>341</top>
+<width>105</width>
+<height>146</height>
+<sql_create_table>CREATE TABLE `pago_tipo` (
+  `idtipopago` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `apiurl` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `apikey` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`idtipopago`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin</sql_create_table>
+</table>
+<table name="usuario" view="colnames">
+<left>226</left>
+<top>37</top>
+<width>107</width>
+<height>248</height>
+<sql_create_table>CREATE TABLE `usuario` (
+  `idusuario` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(250) COLLATE utf8_bin NOT NULL,
+  `password` varchar(250) COLLATE utf8_bin NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `apellido` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `cedula` varchar(12) COLLATE utf8_bin DEFAULT NULL,
+  `fecha_nac` date DEFAULT NULL,
+  `email` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `telefono` varchar(12) COLLATE utf8_bin DEFAULT NULL,
+  `pais` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idusuario`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin</sql_create_table>
+</table>
+<table name="plan" view="colnames">
+<left>20</left>
+<top>324</top>
+<width>136</width>
+<height>133</height>
+<sql_create_table>CREATE TABLE `plan` (
+  `idplan` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `monto` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idplan`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
